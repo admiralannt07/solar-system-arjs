@@ -6,14 +6,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <script>
+        AFRAME.registerComponent('soundhandler', {
+            init: function () {
+                this.soundEl = document.querySelector('[sound]');
+                this.marker = document.querySelector('a-marker');
+                this.visible = false;
+                this.lastPlayTime = 0;
+                this.playDelay = 1000; // Minimum delay between plays in milliseconds
+            },
+            tick: function () {
+                const currentTime = Date.now();
+                
+                // Check if marker is visible and enough time has passed since last play
+                if (this.marker.object3D.visible && !this.visible && 
+                    currentTime - this.lastPlayTime > this.playDelay) {
+                    
+                    // Fade in the sound
+                    const sound = this.soundEl.components.sound;
+                    sound.data.volume = 0;
+                    sound.playSound();
+                    
+                    // Gradually increase volume
+                    let volume = 0;
+                    const fadeInterval = setInterval(() => {
+                        volume += 0.1;
+                        if (volume >= 0.5) {
+                            clearInterval(fadeInterval);
+                            volume = 0.5;
+                        }
+                        sound.data.volume = volume;
+                    }, 100);
+
+                    this.lastPlayTime = currentTime;
+                    this.visible = true;
+                    
+                } else if (!this.marker.object3D.visible && this.visible) {
+                    // Fade out and stop when marker disappears
+                    const sound = this.soundEl.components.sound;
+                    let volume = sound.data.volume;
+                    
+                    const fadeInterval = setInterval(() => {
+                        volume -= 0.1;
+                        if (volume <= 0) {
+                            clearInterval(fadeInterval);
+                            sound.stopSound();
+                        }
+                        sound.data.volume = Math.max(0, volume);
+                    }, 100);
+                    
+                    this.visible = false;
+                }
+            }
+        });
+    </script>
   </head>
   <body style="margin: 0; overflow: hidden;">
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false; sourceWidth: 1280; sourceHeight: 960; displayWidth: 1280; displayHeight: 960;">
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;>
       <a-assets>
-        <audio id="space-music" src="audio/Hans Zimmer - S.T.A.Y (Interstellar Main Theme)(slowed reverb).mp3" preload="auto"></audio>
+        <a-assets>
+            <audio id="space-music" src="audio/Hans Zimmer - S.T.A.Y (Interstellar Main Theme)(slowed reverb).mp3" preload="auto"></audio>
+        </a-assets>
       </a-assets>
 
-      <a-marker type="pattern" url="marker/pattern-8563.patt">
+      <a-marker type="pattern" url="marker/pattern-marker.patt">
         <!-- Sun at the center -->
         <a-entity
           position="0 1 0"
