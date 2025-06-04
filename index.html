@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>AR Solar System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+  </head>
+  <body style="margin: 0; overflow: hidden;">
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+      <a-assets>
+        <audio id="space-music" src="audio/Hans Zimmer - S.T.A.Y (Interstellar Main Theme)(slowed reverb).mp3" preload="auto"></audio>
+      </a-assets>
+
+      <a-marker type="pattern" url="marker/pattern-sun.patt">
+        <!-- Sun at the center -->
+        <a-entity
+          position="0 0 0"
+          scale="0.5 0.5 0.5"
+          gltf-model="3d models/sun.glb"
+          animation="property: rotation; to: 0 360 0; dur: 20000; easing: linear; loop: true">
+        </a-entity>
+
+        <!-- Mercury -->
+        <a-entity
+          position="0 0 0"
+          animation="property: rotation; to: 0 360 0; dur: 15000; easing: linear; loop: true">
+          <a-entity
+            position="1 0 0"
+            scale="0.15 0.15 0.15"
+            gltf-model="3d models/mercury_natural_color.glb"
+            animation="property: rotation; to: 0 360 0; dur: 10000; easing: linear; loop: true">
+          </a-entity>
+        </a-entity>
+
+        <!-- Venus -->
+        <a-entity
+          position="0 0 0"
+          animation="property: rotation; to: 0 360 0; dur: 20000; easing: linear; loop: true">
+          <a-entity
+            position="1.5 0 0"
+            scale="0.2 0.2 0.2"
+            gltf-model="3d models/venus.glb"
+            animation="property: rotation; to: 0 360 0; dur: 12000; easing: linear; loop: true">
+          </a-entity>
+        </a-entity>
+
+        <!-- Earth -->
+        <a-entity
+          position="0 0 0"
+          animation="property: rotation; to: 0 360 0; dur: 25000; easing: linear; loop: true">
+          <a-entity
+            position="2 0 0"
+            scale="0.2 0.2 0.2"
+            gltf-model="3d models/earth.glb"
+            animation="property: rotation; to: 0 360 0; dur: 15000; easing: linear; loop: true">
+          </a-entity>
+        </a-entity>
+
+        <!-- Jupiter -->
+        <a-entity
+          position="0 0 0"
+          animation="property: rotation; to: 0 360 0; dur: 35000; easing: linear; loop: true">
+          <a-entity
+            position="3 0 0"
+            scale="0.4 0.4 0.4"
+            gltf-model="3d models/jupiter.glb"
+            animation="property: rotation; to: 0 360 0; dur: 18000; easing: linear; loop: true">
+          </a-entity>
+        </a-entity>
+
+        <!-- Background Music -->
+        <a-entity sound="src: #space-music; autoplay: true; loop: true; volume: 0.5"></a-entity>
+      </a-marker>
+
+      <a-entity camera></a-entity>
+    </a-scene>
+  </body>
+</html>
